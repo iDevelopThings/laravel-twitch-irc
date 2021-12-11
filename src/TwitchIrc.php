@@ -8,14 +8,13 @@ use TwitchIrc\Bot\Channel\ChannelProviderContract;
 
 class TwitchIrc implements TwitchIrcContract
 {
-
     /**
-     * @var BotUserProviderContract|null $botUser
+     * @var BotUserProviderContract|null
      */
     private ?BotUserProviderContract $botUser = null;
 
     /**
-     * @var ChannelProviderContract[] $channels
+     * @var ChannelProviderContract[]
      */
     private array $channels = [];
 

@@ -1,33 +1,30 @@
 <?php
 
-
 namespace TwitchIrc\Bot\Connection;
-
 
 use Amp\Http\Client\HttpException;
 use Amp\Loop;
 use Amp\Promise;
+use function Amp\Websocket\Client\connect;
 use Amp\Websocket\Client\Connection;
 use Amp\Websocket\Client\ConnectionException;
 use Amp\Websocket\ClosedException;
+use Exception;
+use Illuminate\Support\Facades\Redis;
 use TwitchIrc\Bot\BotUser\BotUserProviderContract;
 use TwitchIrc\Bot\Channel\ChannelsHandler;
 use TwitchIrc\Bot\Output;
-use Exception;
-use Illuminate\Support\Facades\Redis;
 use TwitchIrc\TwitchIrc;
 use TwitchIrc\TwitchIrcContract;
-use function Amp\Websocket\Client\connect;
 
 class BotConnection
 {
-
-    const RELOAD_SIGNAL_KEY = "twitch_bot_reload_signal";
+    public const RELOAD_SIGNAL_KEY = "twitch_bot_reload_signal";
 
     /**
      * The singleton instance.
      *
-     * @var BotConnection|null $instance
+     * @var BotConnection|null
      */
     public static ?BotConnection $instance = null;
 
@@ -35,35 +32,35 @@ class BotConnection
      * The authorised "bot user provider" for the bot account, this
      * has our access_token, username etc
      *
-     * @var BotUserProviderContract|null $botUserProvider
+     * @var BotUserProviderContract|null
      */
     public ?BotUserProviderContract $botUserProvider = null;
 
     /**
      * The bots twitch login username
      *
-     * @var string $nick
+     * @var string
      */
     public string $nick = "";
 
     /**
      * The websocket server to connect to
      *
-     * @var string $host
+     * @var string
      */
     public string $host = 'wss://irc-ws.chat.twitch.tv';
 
     /**
      * The bots oauth token
      *
-     * @var string $password
+     * @var string
      */
     public string $password = "";
 
     /**
      * The socket connection with twitch, that the bot is using
      *
-     * @var Connection|null $connection
+     * @var Connection|null
      */
     public ?Connection $connection = null;
 
@@ -71,7 +68,7 @@ class BotConnection
      * Current irc/connection stage
      * This will decide how we are currently processing and what we will do
      *
-     * @var IrcStageTypes $ircStage
+     * @var IrcStageTypes
      */
     private IrcStageTypes $ircStage;
 
@@ -162,9 +159,10 @@ class BotConnection
     {
         $this->connection = $connection;
 
-        $this->botUserProvider = $this->irc->getBotUser();;
+        $this->botUserProvider = $this->irc->getBotUser();
+        ;
 
-        $this->nick     = $this->botUserProvider->getUsername();
+        $this->nick = $this->botUserProvider->getUsername();
         $this->password = 'oauth:' . $this->botUserProvider->getAccessToken();
 
         $this->send("CAP REQ :twitch.tv/tags twitch.tv/commands twitch.tv/membership");
@@ -272,7 +270,6 @@ class BotConnection
                 (new Output())->warn('Login authorisation has failed. You need to re-authorise the channel with revent.');
             }
         } elseif ($channel !== $stage) {
-
             $channel = ltrim($channel, '#');
 
             try {

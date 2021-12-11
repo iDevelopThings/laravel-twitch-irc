@@ -1,8 +1,6 @@
 <?php
 
-
 namespace TwitchIrc\Bot\Command;
-
 
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
@@ -18,7 +16,6 @@ use Psr\SimpleCache\InvalidArgumentException;
  */
 trait HasCommandCooldown
 {
-
     /**
      * Add the cache entry for managing command cooldown
      *
@@ -62,7 +59,7 @@ trait HasCommandCooldown
      */
     public function cooldownTimeRemaining(): string
     {
-        if (!$this->isOnCooldown()) {
+        if (! $this->isOnCooldown()) {
             return 'none';
         }
 

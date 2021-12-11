@@ -15,7 +15,7 @@ class TwitchIrcInitiator implements TwitchIrcInitiatorContract
     public function __construct(TwitchIrcContract $irc)
     {
         $this->config = config('twitch-irc');
-        $this->irc    = $irc;
+        $this->irc = $irc;
     }
 
     public function setup(): TwitchIrcContract
@@ -35,5 +35,4 @@ class TwitchIrcInitiator implements TwitchIrcInitiatorContract
 
         return $this->irc;
     }
-
 }

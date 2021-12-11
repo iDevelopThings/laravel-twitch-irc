@@ -1,6 +1,5 @@
 <?php
 
-
 namespace TwitchIrc\Bot\Channel;
 
 use Amp\Websocket\ClosedException;
@@ -19,13 +18,12 @@ use TwitchIrc\Bot\Output;
  */
 class ChannelsHandler
 {
-
-    const RUNNING_ON_CHANNELS = 'twitchbot:connected-channels';
+    public const RUNNING_ON_CHANNELS = 'twitchbot:connected-channels';
 
     /**
      * All channels that we are currently connected to with the bot
      *
-     * @var Channel[] $channels
+     * @var Channel[]
      */
     public static array $channels = [];
 
@@ -80,5 +78,4 @@ class ChannelsHandler
     {
         return in_array($username, cache()->get(self::RUNNING_ON_CHANNELS));
     }
-
 }

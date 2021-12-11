@@ -4,7 +4,6 @@ namespace TwitchIrc\Bot\Channel;
 
 class ChannelProvider implements ChannelProviderContract
 {
-
     private ?string $username = null;
 
     private ?string $id = null;
@@ -48,6 +47,4 @@ class ChannelProvider implements ChannelProviderContract
 
         return $this;
     }
-
-
 }

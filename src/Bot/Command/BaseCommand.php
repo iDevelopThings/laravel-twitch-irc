@@ -1,8 +1,6 @@
 <?php
 
-
 namespace TwitchIrc\Bot\Command;
-
 
 use Amp\Promise;
 use TwitchIrc\Bot\Channel\Channel;
@@ -12,134 +10,131 @@ use TwitchIrc\Bot\Message\User\ChatUser;
 
 abstract class BaseCommand
 {
-	use HasCommandPermissions,
-		HasCommandCooldown;
+    use HasCommandPermissions;
+    use HasCommandCooldown;
 
-	/**
-	 * @var ChatCommand|null $chatCommand
-	 */
-	private ?ChatCommand $chatCommand = null;
-
-	/**
-	 * Handle the command processing.
-	 * Define any logic here, respond with a message etc.
+    /**
+     * @var ChatCommand|null
      */
-	abstract public function handle(): void;
+    private ?ChatCommand $chatCommand = null;
 
-	/**
-	 * Some kind of description about how to use the command.
-	 *
-	 * @return string
-	 */
-	abstract public function description(): string;
+    /**
+     * Handle the command processing.
+     * Define any logic here, respond with a message etc.
+     */
+    abstract public function handle(): void;
 
-	/**
-	 * Define any additional aliases that you can use to call this command with.
-	 *
-	 * @return array
-	 */
-	public function aliases(): array
-	{
-		return [];
-	}
+    /**
+     * Some kind of description about how to use the command.
+     *
+     * @return string
+     */
+    abstract public function description(): string;
 
-	/**
-	 * When we receive a message containing a {@see ChatCommand} and we've parsed it
-	 * and initiated it. We will initiate the command handler class and set the command.
-	 *
-	 * @param ChatCommand $command
-	 *
-	 * @return BaseCommand
-	 */
-	public function setCommand(ChatCommand $command): BaseCommand
-	{
-		$this->chatCommand = $command;
+    /**
+     * Define any additional aliases that you can use to call this command with.
+     *
+     * @return array
+     */
+    public function aliases(): array
+    {
+        return [];
+    }
 
-		return $this;
-	}
+    /**
+     * When we receive a message containing a {@see ChatCommand} and we've parsed it
+     * and initiated it. We will initiate the command handler class and set the command.
+     *
+     * @param ChatCommand $command
+     *
+     * @return BaseCommand
+     */
+    public function setCommand(ChatCommand $command): BaseCommand
+    {
+        $this->chatCommand = $command;
 
-	/**
-	 * Get the chat user who triggered the command handler
-	 *
-	 * @return ChatUser
-	 */
-	public function chatUser(): ChatUser
-	{
-		return $this->chatMessage()->user();
-	}
+        return $this;
+    }
 
-	/**
-	 * Get the message that triggered the handler
-	 *
-	 * @return ChatMessage
-	 */
-	public function chatMessage(): ChatMessage
-	{
-		return $this->chatCommand->chatMessage();
-	}
+    /**
+     * Get the chat user who triggered the command handler
+     *
+     * @return ChatUser
+     */
+    public function chatUser(): ChatUser
+    {
+        return $this->chatMessage()->user();
+    }
 
-	/**
-	 * Reply to the user who triggered this command
-	 *
-	 * @param $message
-	 *
-	 * @return Promise
-	 */
-	public function reply($message): Promise
-	{
-		return $this->chatCommand->reply($message);
-	}
+    /**
+     * Get the message that triggered the handler
+     *
+     * @return ChatMessage
+     */
+    public function chatMessage(): ChatMessage
+    {
+        return $this->chatCommand->chatMessage();
+    }
 
-	/**
-	 * There are times when we need to use the message contents
-	 * without the identifier. In this case, we don't want to modify
-	 * the message contents stored on the chatMessage()
-	 *
-	 * @return string
-	 */
-	public function messageWithoutIdentifier(): string
-	{
-		return ltrim(str_replace('!' . $this->command()->getIdentifier(), '', $this->chatMessage()->message()));
-	}
+    /**
+     * Reply to the user who triggered this command
+     *
+     * @param $message
+     *
+     * @return Promise
+     */
+    public function reply($message): Promise
+    {
+        return $this->chatCommand->reply($message);
+    }
 
-	/**
-	 * Get the chat command that was used to trigger the handler
-	 *
-	 * @return ChatCommand
-	 */
-	public function command(): ChatCommand
-	{
-		return $this->chatCommand;
-	}
+    /**
+     * There are times when we need to use the message contents
+     * without the identifier. In this case, we don't want to modify
+     * the message contents stored on the chatMessage()
+     *
+     * @return string
+     */
+    public function messageWithoutIdentifier(): string
+    {
+        return ltrim(str_replace('!' . $this->command()->getIdentifier(), '', $this->chatMessage()->message()));
+    }
 
-	/**
-	 * Some logic to be run after the handle method has been run
-	 */
-	public function afterHandle()
-	{
-		if ($this->cooldownSeconds() > 0) {
-			$this->startCooldown();
-		}
-	}
+    /**
+     * Get the chat command that was used to trigger the handler
+     *
+     * @return ChatCommand
+     */
+    public function command(): ChatCommand
+    {
+        return $this->chatCommand;
+    }
 
+    /**
+     * Some logic to be run after the handle method has been run
+     */
+    public function afterHandle()
+    {
+        if ($this->cooldownSeconds() > 0) {
+            $this->startCooldown();
+        }
+    }
 
-	/**
-	 * The "trigger" for the command, for example;
-	 * If we wanted the user to trigger it with !ping, it should return "ping"
-	 *
-	 * @return string
-	 */
-	abstract public function identifier(): string;
+    /**
+     * The "trigger" for the command, for example;
+     * If we wanted the user to trigger it with !ping, it should return "ping"
+     *
+     * @return string
+     */
+    abstract public function identifier(): string;
 
-	/**
-	 * The channel instance that this handler was triggered on
-	 *
-	 * @return Channel
-	 */
-	public function channel(): Channel
-	{
-		return $this->chatMessage()->channelHandler();
-	}
-
-
+    /**
+     * The channel instance that this handler was triggered on
+     *
+     * @return Channel
+     */
+    public function channel(): Channel
+    {
+        return $this->chatMessage()->channelHandler();
+    }
 }

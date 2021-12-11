@@ -28,17 +28,15 @@ class TwitchIrcServiceProvider extends PackageServiceProvider
     {
         $this->app->singleton(TwitchIrcContract::class, TwitchIrc::class);
         $this->app->singleton(TwitchIrcInitiatorContract::class, TwitchIrcInitiator::class);
-
     }
 
     public function packageRegistered()
     {
-        if (!config()->has('filesystems.disks.twitch-irc-commands')) {
-
+        if (! config()->has('filesystems.disks.twitch-irc-commands')) {
             config()->set('filesystems.disks.twitch-irc-commands', [
-                'driver'     => 'local',
-                'root'       => app_path('Services/TwitchIrc/Commands'),
-                'url'        => null,
+                'driver' => 'local',
+                'root' => app_path('Services/TwitchIrc/Commands'),
+                'url' => null,
                 'visibility' => 'private',
             ]);
 

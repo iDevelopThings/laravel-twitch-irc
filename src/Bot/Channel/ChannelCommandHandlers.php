@@ -1,18 +1,15 @@
 <?php
 
-
 namespace TwitchIrc\Bot\Channel;
-
 
 use App\Services\TwitchIrc\Commands\HelloWorldCommand;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use TwitchIrc\Bot\Command\BaseCommand;
 use TwitchIrc\Bot\Output;
-use Illuminate\Support\Str;
 
 class ChannelCommandHandlers
 {
-
     public array $rewards = [];
     /**
      * @var BaseCommand[]
@@ -32,7 +29,7 @@ class ChannelCommandHandlers
     public function uniqueCommands(): array
     {
         return collect($this->commands)
-            ->unique(fn($command) => $command->identifier())
+            ->unique(fn ($command) => $command->identifier())
             ->toArray();
     }
 
@@ -75,9 +72,9 @@ class ChannelCommandHandlers
     {
         $commandClasses = Storage::disk('twitch-irc-commands')->allFiles();
 
-        $fff            = resolve(HelloWorldCommand::class);
+        $fff = resolve(HelloWorldCommand::class);
         $commandClasses = collect($commandClasses)
-            ->map(fn($class) => $this->formatDefaultCommandClass($class))
+            ->map(fn ($class) => $this->formatDefaultCommandClass($class))
             ->filter(function ($commandClass) {
                 // $class = new ReflectionClass($commandClass);
 
@@ -99,8 +96,8 @@ class ChannelCommandHandlers
 
                 return [
                     'identifier' => $command->identifier(),
-                    'class'      => $command,
-                    'aliases'    => $command->aliases(),
+                    'class' => $command,
+                    'aliases' => $command->aliases(),
                 ];
             });
 
@@ -145,7 +142,7 @@ class ChannelCommandHandlers
 
         (new Output())->line('[COMMAND LOADER] Loaded command !' . $identifier);
 
-        if (!empty($aliases)) {
+        if (! empty($aliases)) {
             foreach ($aliases as $alias) {
                 $this->commands[$alias] = $class;
                 (new Output())->line('[COMMAND LOADER] Loaded command alias of !' . $identifier . ' as !' . $alias);

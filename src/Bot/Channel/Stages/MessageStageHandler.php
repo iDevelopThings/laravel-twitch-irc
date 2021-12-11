@@ -1,16 +1,13 @@
 <?php
 
-
 namespace TwitchIrc\Bot\Channel\Stages;
 
-
-use TwitchIrc\Bot\Message\ChatMessage;
 use Exception;
+use TwitchIrc\Bot\Message\ChatMessage;
 use TwitchIrc\Bot\Output;
 
 class MessageStageHandler extends IrcStageHandler
 {
-
     /**
      * Handle the IRC Stage
      *

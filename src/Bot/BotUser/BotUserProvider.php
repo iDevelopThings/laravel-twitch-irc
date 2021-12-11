@@ -4,7 +4,6 @@ namespace TwitchIrc\Bot\BotUser;
 
 class BotUserProvider implements BotUserProviderContract
 {
-
     private ?string $username = null;
 
     private ?string $access_token = null;

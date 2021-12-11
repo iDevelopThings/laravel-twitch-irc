@@ -1,15 +1,12 @@
 <?php
 
-
 namespace TwitchIrc\Bot;
-
 
 use Amp\Loop;
 use Amp\Websocket\ClosedException;
 use Amp\Websocket\Message;
 use Illuminate\Support\Facades\Log;
 use TwitchIrc\Bot\Connection\BotConnection;
-use TwitchIrc\Initiator\TwitchIrcInitiator;
 use TwitchIrc\Initiator\TwitchIrcInitiatorContract;
 
 class TwitchBot
@@ -61,6 +58,4 @@ class TwitchBot
         //BotConnection::sendReloadSignal();
         Loop::stop();
     }
-
-
 }

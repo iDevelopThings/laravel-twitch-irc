@@ -1,8 +1,6 @@
 <?php
 
-
 namespace TwitchIrc\Bot\Message;
-
 
 use Amp\Promise;
 use Amp\Websocket\ClosedException;
@@ -10,7 +8,6 @@ use Illuminate\Support\Str;
 
 class ChatCommand
 {
-
     /**
      * !shoutout, without the exclamation mark
      *
@@ -47,7 +44,8 @@ class ChatCommand
      */
     public function parseCommand()
     {
-        $splitMessage = preg_split('/[\s]+/', $this->message->message());;
+        $splitMessage = preg_split('/[\s]+/', $this->message->message());
+        ;
 
         $this->identifier = strtolower(Str::substr($splitMessage[0], 1));
         unset($splitMessage[0]);
@@ -58,7 +56,7 @@ class ChatCommand
             ->commandHandler()
             ->getCommand($this->identifier);
 
-        if (!$command) {
+        if (! $command) {
             return;
         }
 
@@ -70,7 +68,7 @@ class ChatCommand
             return;
         }
 
-        if (!$command->userHasPermissions()) {
+        if (! $command->userHasPermissions()) {
             $this->reply("No permissions.");
 
             return;
@@ -106,8 +104,8 @@ class ChatCommand
     {
         $prefixMessage = "@{$this->chatMessage()->username()}";
 
-        if (!empty($this->chatMessage()->mentions())) {
-            $prefixMessage = implode(' ', array_map(fn($name) => '@' . $name, $this->chatMessage()->mentions()));
+        if (! empty($this->chatMessage()->mentions())) {
+            $prefixMessage = implode(' ', array_map(fn ($name) => '@' . $name, $this->chatMessage()->mentions()));
         }
 
         return $this->chatMessage()
@@ -138,6 +136,4 @@ class ChatCommand
     {
         return $this->identifier;
     }
-
-
 }

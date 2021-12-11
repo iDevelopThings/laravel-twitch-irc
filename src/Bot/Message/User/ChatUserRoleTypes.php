@@ -14,10 +14,10 @@ use BenSampo\Enum\Enum;
  */
 final class ChatUserRoleTypes extends Enum
 {
-    const VIEWER     = 0;
-    const TURBO      = 1;
-    const VIP        = 2;
-    const SUBSCRIBER = 3;
-    const MODERATOR  = 4;
-    const STREAMER   = 5;
+    public const VIEWER = 0;
+    public const TURBO = 1;
+    public const VIP = 2;
+    public const SUBSCRIBER = 3;
+    public const MODERATOR = 4;
+    public const STREAMER = 5;
 }

@@ -2,11 +2,10 @@
 
 namespace TwitchIrc\Bot\Connection;
 
+use BenSampo\Enum\Enum;
 use TwitchIrc\Bot\Channel\Stages\JoinRoomStageHandler;
 use TwitchIrc\Bot\Channel\Stages\MessageStageHandler;
-use TwitchIrc\Bot\Channel\Stages\PingStageHandler;
 use TwitchIrc\Bot\Channel\Stages\RoomStateStageHandler;
-use BenSampo\Enum\Enum;
 
 /**
  * @method static static ignoreStage()
@@ -23,35 +22,34 @@ use BenSampo\Enum\Enum;
  */
 final class IrcStageTypes extends Enum
 {
-	const IGNORE_STAGE          = 'IGNORE_STAGE';
-	const PING_STAGE            = 'PING';
-	const ACK_STAGE             = 'ACK';
-	const ROOMSTATE_STAGE       = 'ROOMSTATE';
-	const GLOBALUSERSTATE_STAGE = 'GLOBALUSERSTATE';
-	const NOTICE_STAGE          = 'NOTICE';
-	const MESSAGE_STAGE         = 'PRIVMSG';
-	const USERSTATE_STAGE       = 'USERSTATE';
-	const PART_STAGE            = 'PART';
-	const JOIN_STAGE            = 'JOIN';
+    public const IGNORE_STAGE = 'IGNORE_STAGE';
+    public const PING_STAGE = 'PING';
+    public const ACK_STAGE = 'ACK';
+    public const ROOMSTATE_STAGE = 'ROOMSTATE';
+    public const GLOBALUSERSTATE_STAGE = 'GLOBALUSERSTATE';
+    public const NOTICE_STAGE = 'NOTICE';
+    public const MESSAGE_STAGE = 'PRIVMSG';
+    public const USERSTATE_STAGE = 'USERSTATE';
+    public const PART_STAGE = 'PART';
+    public const JOIN_STAGE = 'JOIN';
 
+    /**
+     * Converts our stage to a fully qualified class name
+     *
+     * @param $stage
+     *
+     * @return string[]|null
+     */
+    public static function classForStage($stage): ?array
+    {
+        $stageHandlers = [
+            'ROOMSTATE' => [
+                JoinRoomStageHandler::class,
+                RoomStateStageHandler::class,
+            ],
+            'PRIVMSG' => [MessageStageHandler::class],
+        ];
 
-	/**
-	 * Converts our stage to a fully qualified class name
-	 *
-	 * @param $stage
-	 *
-	 * @return string[]|null
-	 */
-	public static function classForStage($stage): ?array
-	{
-		$stageHandlers = [
-			'ROOMSTATE' => [
-				JoinRoomStageHandler::class,
-				RoomStateStageHandler::class,
-			],
-			'PRIVMSG'   => [MessageStageHandler::class],
-		];
-
-		return $stageHandlers[$stage->value] ?? null;
-	}
+        return $stageHandlers[$stage->value] ?? null;
+    }
 }
